@@ -1,0 +1,15 @@
+# Parâmetros espelhados do notebook mask-rcnn
+model:
+  architecture: mask_rcnn_R_50_FPN_3x
+  num_classes: 2
+  score_thresh_test: 0.5
+  batch_size_per_image: 128
+  thing_classes:
+    - objects
+    - display
+
+training_reference:
+  ims_per_batch: 2
+  base_lr: 0.001
+  max_iter: 3000
+  num_workers: 0

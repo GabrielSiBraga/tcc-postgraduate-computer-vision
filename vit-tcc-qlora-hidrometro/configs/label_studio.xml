@@ -1,0 +1,19 @@
+<View>
+  <Image name="image" value="$image"/>
+  <Header value="Leitura — parte inteira (roletes pretos)"/>
+  <Number name="inteiro" toName="image" value="$inteiro" min="0"/>
+  <Header value="Leitura — parte decimal (roletes vermelhos)"/>
+  <Number name="decimal" toName="image" value="$decimal" min="0"/>
+  <Header value="Leitura completa (como no visor)"/>
+  <TextArea name="completo" toName="image" value="$completo" placeholder="Ex: 0302,21" rows="1" editable="true"/>
+  <Header value="Fabricante"/>
+  <TextArea name="fabricante" toName="image" value="$fabricante" placeholder="Ex: Itron" rows="1" editable="true"/>
+  <Header value="Estado do vidro"/>
+  <Choices name="estado" toName="image" choice="single" value="$estado">
+    <Choice value="normal"/>
+    <Choice value="embacado"/>
+    <Choice value="trincado"/>
+    <Choice value="sujo"/>
+    <Choice value="anomalia"/>
+  </Choices>
+</View>

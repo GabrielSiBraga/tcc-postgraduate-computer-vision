@@ -1,0 +1,41 @@
+# Ambientes virtuais
+.venv-trabalho/
+.conda/
+venv/
+.env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Detectron2 / ML outputs (exceto pesos finais)
+output/*
+!output/model_final.pth
+!output/metrics.json
+!output/last_checkpoint
+inference/
+*.pkl
+*.log
+
+# Outros pesos (model_final.pth é exceção acima)
+*.pth
+!output/model_final.pth
+
+# Datasets compactados
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/

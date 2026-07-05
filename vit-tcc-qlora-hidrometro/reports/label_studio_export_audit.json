@@ -1,0 +1,35 @@
+{
+  "total_tasks": 719,
+  "tasks_with_issues": 0,
+  "array_multi_valor": 0,
+  "inconsistent_leitura": 0,
+  "splits": [
+    {
+      "split": "train",
+      "source": "C:\\Users\\Niccolas\\Downloads\\TrabalhoDetecaoObjetos\\vit-tcc-qlora-hidrometro\\data\\label_studio\\export\\train.json",
+      "total_tasks": 503,
+      "tasks_with_issues": 0,
+      "array_multi_valor": 0,
+      "inconsistent_leitura": 0,
+      "issues": []
+    },
+    {
+      "split": "val",
+      "source": "C:\\Users\\Niccolas\\Downloads\\TrabalhoDetecaoObjetos\\vit-tcc-qlora-hidrometro\\data\\label_studio\\export\\val.json",
+      "total_tasks": 144,
+      "tasks_with_issues": 0,
+      "array_multi_valor": 0,
+      "inconsistent_leitura": 0,
+      "issues": []
+    },
+    {
+      "split": "test",
+      "source": "C:\\Users\\Niccolas\\Downloads\\TrabalhoDetecaoObjetos\\vit-tcc-qlora-hidrometro\\data\\label_studio\\export\\test.json",
+      "total_tasks": 72,
+      "tasks_with_issues": 0,
+      "array_multi_valor": 0,
+      "inconsistent_leitura": 0,
+      "issues": []
+    }
+  ]
+}

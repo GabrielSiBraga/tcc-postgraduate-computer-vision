@@ -1,0 +1,17 @@
+crop:
+  strategy: expand_to_full_meter
+  ratios:
+    left: 1.5
+    right: 1.5
+    top: 1.0
+    bottom: 2.0
+  min_coverage: 0.85
+  target_aspect_ratio: null
+
+clahe:
+  clip_limit: 2.0
+  tile_grid_size: [8, 8]
+
+calibration:
+  num_samples: 20
+  output_dir: reports/calibration

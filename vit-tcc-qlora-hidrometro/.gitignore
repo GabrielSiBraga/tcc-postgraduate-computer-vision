@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# Dados gerados (exceto SFT versionado)
+data/*
+!data/sft/
+!data/sft/*.jsonl
+
+# Artefatos (exceto adaptador LoRA final)
+artifacts/*
+!artifacts/lora_adapter/
+!artifacts/lora_adapter/**
+
+# Checkpoints intermediários de treino
+artifacts/lora_adapter/checkpoint-*/
+
+# Pesos soltos (Detectron2 fica em mask-rcnn/)
+*.pth
+*.ckpt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Reports (versionar JSON de métricas)
+reports/calibration/
+*.log
+!reports/*.json

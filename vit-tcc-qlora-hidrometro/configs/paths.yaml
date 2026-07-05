@@ -1,0 +1,25 @@
+project_root: .
+
+detectron2:
+  repo: ../mask-rcnn/detectron2_repo
+  weights: ../mask-rcnn/output/model_final.pth
+  config_base: COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml
+  score_thresh: 0.5
+  display_class_id: 1
+  device: cuda
+
+dataset:
+  root: ../mask-rcnn/dataset-hidrometro
+  splits:
+    train: train
+    val: valid
+    test: test
+  annotation_file: _annotations.coco.json
+
+output:
+  crops: data/crops
+  autolabel_raw: data/autolabel/raw_json
+  autolabel_validated: data/autolabel/validated
+  sft: data/sft
+  lora_adapter: artifacts/lora_adapter
+  reports: reports

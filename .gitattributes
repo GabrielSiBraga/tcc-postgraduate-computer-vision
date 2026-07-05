@@ -1,0 +1,3 @@
+# Arquivos grandes da entrega TCC (Git LFS)
+mask-rcnn/output/model_final.pth filter=lfs diff=lfs merge=lfs -text
+vit-tcc-qlora-hidrometro/artifacts/lora_adapter/adapter_model.safetensors filter=lfs diff=lfs merge=lfs -text

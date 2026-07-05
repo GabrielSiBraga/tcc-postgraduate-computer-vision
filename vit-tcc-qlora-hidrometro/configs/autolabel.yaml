@@ -1,0 +1,36 @@
+openai:
+  model: gpt-4o
+  json_mode: true
+  max_retries: 3
+  retry_delay_seconds: 2
+  temperature: 0.1
+  max_tokens: 512
+
+prompt: |
+  Você é um leiturista de hidrômetros. A imagem mostra um hidrômetro completo.
+  Leia o visor de roletes e retorne APENAS um JSON com esta estrutura exata:
+  {
+    "leitura": {
+      "inteiro": <número dos roletes pretos, sem zeros à esquerda>,
+      "decimal": <número dos roletes vermelhos>,
+      "completo": "<string exatamente como aparece no visor, com vírgula ou ponto>"
+    },
+    "fabricante": "<marca/placa>",
+    "estado": "<normal|embacado|trincado|sujo|anomalia>"
+  }
+  Regras:
+  - inteiro: valor numérico dos dígitos pretos (ex: 302, não 0302)
+  - decimal: valor numérico dos dígitos vermelhos (ex: 21)
+  - completo: transcrição literal do visor (ex: "0302,21")
+  - Se um dígito estiver cortado, use o menor valor possível
+
+sft_prompt: "<VQA>Leia o hidrômetro e retorne JSON com leitura (inteiro, decimal, completo), fabricante e estado."
+
+label_studio:
+  project_title: "Hidrômetro VLM Validation"
+  estado_choices:
+    - normal
+    - embacado
+    - trincado
+    - sujo
+    - anomalia

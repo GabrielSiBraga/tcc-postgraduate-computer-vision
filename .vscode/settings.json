@@ -1,0 +1,14 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/vit-tcc-qlora-hidrometro/.venv/Scripts/python.exe",
+  "jupyter.notebookFileRoot": "${workspaceFolder}/vit-tcc-qlora-hidrometro",
+  "jupyter.kernels.filter": [],
+  "notebook.kernelProviderAssociations": [
+    {
+      "viewType": "jupyter-notebook",
+      "kernelProvider": "ms-toolsai.jupyter"
+    }
+  ],
+  "files.associations": {
+    "**/vit-tcc-qlora-hidrometro/notebooks/*.ipynb": "jupyter-notebook"
+  }
+}

@@ -1,0 +1,44 @@
+model:
+  name: microsoft/Florence-2-large
+  trust_remote_code: true
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: bfloat16
+  torch_dtype: bfloat16
+
+lora:
+  r: 16
+  lora_alpha: 32
+  target_modules:
+    - q_proj
+    - v_proj
+    - k_proj
+    - o_proj
+  lora_dropout: 0.05
+  bias: none
+  task_type: CAUSAL_LM
+
+training:
+  num_train_epochs: 8
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 1.0e-4
+  optim: paged_adamw_8bit
+  bf16: true
+  fp16: false
+  logging_steps: 10
+  save_steps: 50
+  eval_steps: 50
+  load_best_model_at_end: true
+  metric_for_best_model: eval_loss
+  save_total_limit: 3
+  max_new_tokens: 128
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  early_stopping_patience: 3
+  lr_scheduler_type: cosine
+  report_to: none
+
+output_dir: artifacts/lora_adapter
