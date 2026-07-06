@@ -2,9 +2,37 @@
 
 **Repositório:** `tcc-postgraduate-computer-vision` — Trabalho de Conclusão de Curso (Pós-graduação em Visão Computacional).
 
-Pipeline híbrido que combina **detecção de objetos** (Mask R-CNN) e **visão-linguagem** (Florence-2 QLoRA) para ler hidrômetros analógicos a partir de fotos de campo.
+**Estudante** - Gabriel Silva Braga
+**Curso** - Computer Vision Master
 
-A entrega é **este repositório**: código, modelos treinados, notebooks explicativos e métricas documentadas.
+---
+
+## Resumo do projeto
+
+Este trabalho propõe a **automatização da leitura de hidrômetros analógicos** a partir de fotos capturadas em campo, problema tradicionalmente resolvido por inspeção manual, lenta e sujeita a erros de transcrição. A solução adotada é um **pipeline híbrido** que combina detecção de objetos com Mask R-CNN (localização e segmentação do visor) e um modelo de visão-linguagem Florence-2 fine-tuned via QLoRA (extração estruturada da leitura em JSON).
+
+Os resultados demonstram viabilidade técnica em ambas as etapas: o detector atinge **~98,2%** de acurácia de máscara, garantindo isolamento confiável da região de interesse; o VLM, avaliado no split de teste (n=72), alcança **100%** de parse JSON válido, **38,9%** de exact match na leitura, **79,0%** de acurácia por caractere e **97,2%** de acurácia em fabricante e estado. A entrega consiste neste repositório com código reproduzível, modelos treinados, notebooks explicativos, métricas documentadas e demo opcional (FastAPI + Streamlit).
+
+---
+
+## Introdução
+
+Hidrômetros analógicos permanecem amplamente utilizados em redes de abastecimento de água. A leitura periódica dos medidores é essencial para faturamento e gestão de consumo, mas o processo manual — fotografar o equipamento, identificar o visor e transcrever os dígitos — é trabalhoso e propenso a inconsistências.
+
+As imagens de campo apresentam desafios visuais significativos: **reflexos** na superfície do visor, **baixo contraste** entre roletes pretos e vermelhos, variação de **fabricantes** (placas e tipografias distintas) e diferentes **estados físicos** do equipamento (*normal*, *embacado*, *trincado*, *sujo*, *anomalia*). Essas condições dificultam a aplicação direta de OCR genérico ou de modelos de visão-linguagem sem adaptação à tarefa.
+
+Para contornar essas limitações, adotou-se uma abordagem em **duas etapas**: primeiro, um modelo de detecção e segmentação (Mask R-CNN) localiza o visor na foto completa; em seguida, um VLM (Florence-2) especializado via QLoRA interpreta os roletes e retorna um JSON estruturado com leitura numérica, fabricante e estado. Este documento descreve o projeto entregue como Trabalho de Conclusão de Curso em Visão Computacional.
+
+---
+
+## Objetivo
+
+Os objetivos deste trabalho são:
+
+1. **Automatizar a leitura de hidrômetros analógicos** a partir de fotografias de campo, eliminando a transcrição manual.
+2. **Detectar e segmentar a região do visor** utilizando Mask R-CNN (Detectron2, backbone R50-FPN), isolando a área de interesse antes da interpretação.
+3. **Extrair leitura numérica, fabricante e estado** por meio de fine-tuning QLoRA do Florence-2-large, produzindo saída JSON estruturada.
+4. **Avaliar quantitativamente** o desempenho no split de teste (72 amostras, nunca utilizadas no treino) e disponibilizar uma **demo reproduzível** para inferência em fotos completas.
 
 ---
 
@@ -51,6 +79,74 @@ Detalhes de scripts, hiperparâmetros e decisões: [`vit-tcc-qlora-hidrometro/do
 
 ---
 
+## Banco de dados
+
+O projeto utiliza **dois conjuntos de dados complementares**: um para detecção (formato COCO) e outro para leitura via VLM (formato SFT/JSONL).
+
+### Camada 1 — Detecção (COCO)
+
+| Atributo | Detalhe |
+|----------|---------|
+| Raiz | [`mask-rcnn/dataset-hidrometro/`](mask-rcnn/dataset-hidrometro/) |
+| Configuração | [`vit-tcc-qlora-hidrometro/configs/paths.yaml`](vit-tcc-qlora-hidrometro/configs/paths.yaml) |
+| Formato | COCO (`_annotations.coco.json`) |
+| Classe | `display` (id=1) — visor do hidrômetro |
+| Splits | `train`, `valid`, `test` |
+| Origem | Export Roboflow (CC BY 4.0) |
+| No repositório | Anotações de treino presentes; pesos finais em `mask-rcnn/output/model_final.pth` |
+
+O Mask R-CNN foi treinado sobre este dataset para localizar e segmentar o visor nas fotos brutas. Os pesos treinados (`model_final.pth`, ~335 MB) estão incluídos na entrega.
+
+### Camada 2 — Leitura VLM (SFT)
+
+Após a detecção, cada imagem passa por expansão de bounding box e realce de contraste (CLAHE), gerando crops em `data/crops/{split}/`. Sobre esses crops foram criadas **719 anotações** revisadas manualmente, divididas nos splits abaixo:
+
+| Split | Amostras | Proporção | Uso |
+|-------|----------|-----------|-----|
+| **Treino** | 503 | ~70% | Fine-tuning LoRA |
+| **Validação** | 144 | ~20% | Early stopping / `eval_loss` |
+| **Teste** | 72 | ~10% | Métricas finais (nunca usado no treino) |
+
+Fonte dos splits: [`vit-tcc-qlora-hidrometro/reports/label_studio_export_audit.json`](vit-tcc-qlora-hidrometro/reports/label_studio_export_audit.json).
+
+**Arquivos do dataset SFT:**
+
+| Caminho | Conteúdo |
+|---------|----------|
+| `vit-tcc-qlora-hidrometro/data/sft/{train,val,test}.jsonl` | Dataset no formato SFT para treino |
+| `vit-tcc-qlora-hidrometro/data/autolabel/validated/{split}/` | Ground truth validado |
+| `vit-tcc-qlora-hidrometro/data/label_studio/export/` | Export final do Label Studio |
+| `vit-tcc-qlora-hidrometro/data/crops/{split}/` | Imagens recortadas com CLAHE |
+
+**Schema de cada amostra** (definido em [`configs/autolabel.yaml`](vit-tcc-qlora-hidrometro/configs/autolabel.yaml)):
+
+```json
+{
+  "leitura": { "inteiro": 302, "decimal": 21, "completo": "0302,21" },
+  "fabricante": "SAGA",
+  "estado": "normal|embacado|trincado|sujo|anomalia"
+}
+```
+
+- `inteiro`: valor numérico dos roletes pretos (sem zeros à esquerda)
+- `decimal`: valor numérico dos roletes vermelhos
+- `completo`: transcrição literal do visor (ex.: `"0302,21"`)
+- `fabricante`: marca/placa identificada no hidrômetro
+- `estado`: condição física do visor
+
+**Fluxo de preparação dos dados:**
+
+1. Foto bruta de campo → Mask R-CNN → bounding box do visor
+2. Expansão de crop + CLAHE → `data/crops/{split}/`
+3. Autolabel inicial (GPT-4o, etapa histórica) + revisão humana no Label Studio
+4. Export → validação → conversão para `data/sft/*.jsonl`
+
+**Qualidade:** auditoria com **100% de consistência** (719 registros, 0 issues) — [`vit-tcc-qlora-hidrometro/reports/label_audit.json`](vit-tcc-qlora-hidrometro/reports/label_audit.json).
+
+> **Nota de entrega:** as anotações já estão prontas e validadas. Não é necessário recriar labels nem executar novamente o fluxo de Label Studio.
+
+---
+
 ## Mapa do repositório
 
 ```
@@ -91,17 +187,20 @@ TrabalhoDetecaoObjetos/
 
 ---
 
-## Labels — não é necessário recriar
+## Conclusão e próximos passos
 
-Anotação feita no **Label Studio** (com autolabeling inicial para acelerar, revisão manual e export). Ground truth em:
+### Conclusão
 
-| Split | Amostras | Uso |
-|-------|----------|-----|
-| train | 503 | Treino LoRA |
-| val | 144 | Early stopping |
-| test | 72 | Métricas finais |
+O pipeline híbrido proposto demonstrou ser **tecnicamente viável** para leitura automática de hidrômetros analógicos. A etapa de detecção (Mask R-CNN) alcança acurácia de máscara de ~98,2%, garantindo que o VLM receba crops adequados do visor. O fine-tuning QLoRA do Florence-2 transformou um modelo base incapaz de gerar JSON válido (0%) em um sistema que produz respostas estruturadas corretas em **100%** das amostras de teste.
 
-Arquivos: `vit-tcc-qlora-hidrometro/data/sft/*.jsonl`. Auditoria: **100% consistência** (719 registros) — [`reports/label_audit.json`](vit-tcc-qlora-hidrometro/reports/label_audit.json).
+A transcrição literal da leitura permanece desafiadora: o exact match de 38,9% reflete a exigência de correspondência exata (zeros à esquerda, vírgula), enquanto a acurácia por caractere de 79,0% indica que a maioria das predições está parcialmente correta. A classificação de fabricante e estado é robusta (97,2% de acurácia), embora o F1 macro seja limitado por classes raras no conjunto de teste.
+
+### Próximos passos
+
+1. **Ampliar o dataset**, com foco em classes sub-representadas (*embacado*, marcas minoritárias) para melhorar generalização.
+2. **Melhorar o exact match** da leitura via pós-processamento de dígitos, data augmentation direcionada ou modelo OCR dedicado para os roletes.
+3. **Reduzir a dependência do Detectron2**, explorando detectores mais leves ou abordagens end-to-end que eliminem a etapa intermediária.
+4. **Otimizar a inferência para produção**, reduzindo latência e viabilizando deploy em dispositivos edge.
 
 ---
 
@@ -159,7 +258,7 @@ Teste via curl: `curl -X POST http://localhost:8000/predict -F "file=@foto.jpg"`
 
 ## Checklist de entrega
 
-- [x] README raiz com objetivo, resultados % e pipeline
+- [x] README raiz com resumo, introdução, objetivo, banco de dados, conclusão, resultados % e pipeline
 - [x] 5 notebooks documentando cada fase
 - [x] `model_final.pth` (Detectron2) incluído
 - [x] `lora_adapter/` (Florence-2 QLoRA) incluído
