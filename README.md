@@ -1,9 +1,13 @@
 # TCC - Leitura Automática de Hidrômetros com Visão Computacional
 
-**Repositório:** `tcc-postgraduate-computer-vision` - Trabalho de Conclusão de Curso (Pós-graduação em Visão Computacional).
+#### Alun(o/a): [Gabriel Silva Braga](https://github.com/GabrielSiBraga).
+#### Orientador(/a/es/as): [Vitor Bento de Sousa](https://github.com/link_do_github).
 
-**Estudante** - Gabriel Silva Braga
-**Curso** - Computer Vision Master
+---
+Trabalho apresentado ao curso [CV Master](https://ccec.puc-rio.br/site/Folder?nCurso=visao-computacional%3A-interpretando-o-mundo-atraves-de-imagens-(traco)-computer-vision-master&nInst=CCE) como pré-requisito para conclusão de curso.
+
+**Repositório:** `tcc-postgraduate-computer-vision` - Trabalho de Conclusão de Curso (Pós-graduação em Visão Computacional).
+- [Link para o código](https://github.com/GabrielSiBraga/tcc-postgraduate-computer-vision).
 
 ---
 
@@ -12,6 +16,14 @@
 Este trabalho propõe a **automatização da leitura de hidrômetros analógicos** a partir de fotos capturadas em campo, problema tradicionalmente resolvido por inspeção manual, lenta e sujeita a erros de transcrição. A solução adotada é um **pipeline híbrido** que combina detecção de objetos com Mask R-CNN (localização e segmentação do visor) e um modelo de visão-linguagem Florence-2 fine-tuned via QLoRA (extração estruturada da leitura em JSON).
 
 Os resultados demonstram viabilidade técnica em ambas as etapas: o detector atinge **~98,2%** de acurácia de máscara, garantindo isolamento confiável da região de interesse; o VLM, avaliado no split de teste (n=72), alcança **100%** de parse JSON válido, **38,9%** de exact match na leitura, **79,0%** de acurácia por caractere e **97,2%** de acurácia em fabricante e estado. A entrega consiste neste repositório com código reproduzível, modelos treinados, notebooks explicativos, métricas documentadas e demo opcional (FastAPI + Streamlit).
+
+---
+
+## Abstract
+
+This work proposes the **automation of analog water meter reading** from field-captured photographs, a task traditionally performed through manual inspection that is slow and prone to transcription errors. The adopted solution is a **hybrid pipeline** combining object detection with Mask R-CNN (localization and segmentation of the display) and a vision-language model, Florence-2, fine-tuned via QLoRA (structured extraction of the reading as JSON).
+
+Results demonstrate technical feasibility at both stages: the detector achieves **~98.2%** mask accuracy, ensuring reliable isolation of the region of interest; the VLM, evaluated on the test split (n=72), reaches **100%** valid JSON parsing, **38.9%** exact match on the reading, **79.0%** character-level accuracy, and **97.2%** accuracy on manufacturer and physical state. The deliverable consists of this repository with reproducible code, trained models, explanatory notebooks, documented metrics, and an optional demo (FastAPI + Streamlit).
 
 ---
 
@@ -258,10 +270,18 @@ Teste via curl: `curl -X POST http://localhost:8000/predict -F "file=@foto.jpg"`
 
 ## Checklist de entrega
 
-- [x] README raiz com resumo, introdução, objetivo, banco de dados, conclusão, resultados % e pipeline
+- [x] README raiz com resumo, abstract, introdução, objetivo, banco de dados, conclusão, resultados % e pipeline
 - [x] 5 notebooks documentando cada fase
 - [x] `model_final.pth` (Detectron2) incluído
 - [x] `lora_adapter/` (Florence-2 QLoRA) incluído
 - [x] `reports/*.json` com métricas atualizadas
 - [x] Scripts 00–07 reproduzíveis
 - [x] FastAPI / Streamlit documentados
+
+---
+
+Matrícula: 232.100.436
+
+Pontifícia Universidade Católica do Rio de Janeiro
+
+Curso de Pós Graduação *Computer Vision Master*
