@@ -1,4 +1,4 @@
-# Reports — Métricas pré-calculadas
+# Reports - Métricas pré-calculadas
 
 Arquivos JSON para consulta **sem GPU**. Regenerados em jul/2026 com adaptador LoRA atual.
 

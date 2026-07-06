@@ -19,7 +19,7 @@ echo "==> Instalando PyTorch CUDA (cu128 para Python 3.14)"
 python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 
 echo "==> Instalando Detectron2 (feche Jupyter antes)"
-python -m pip install -e ../mask-rcnn/detectron2_repo --no-build-isolation || echo "AVISO: detectron2 falhou — feche notebook e repita"
+python -m pip install -e ../mask-rcnn/detectron2_repo --no-build-isolation || echo "AVISO: detectron2 falhou - feche notebook e repita"
 
 echo "==> Instalando projeto hidrometro-vlm"
 python -m pip install -e ".[dev]"

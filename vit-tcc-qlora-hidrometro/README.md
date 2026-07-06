@@ -1,4 +1,4 @@
-# Módulo 2 — Pipeline VLM + QLoRA
+# Módulo 2 - Pipeline VLM + QLoRA
 
 Parte do TCC [`TrabalhoDetecaoObjetos`](../README.md): após o Mask R-CNN localizar o hidrômetro, **Florence-2 QLoRA** lê o visor e retorna JSON estruturado.
 
@@ -18,7 +18,7 @@ Ver [`reports/evaluation_test.json`](reports/evaluation_test.json). Comparativo 
 
 ---
 
-## Pipeline — scripts e motivos
+## Pipeline - scripts e motivos
 
 | Script | Entrada | Saída | Motivo |
 |--------|---------|-------|--------|
@@ -31,7 +31,7 @@ Ver [`reports/evaluation_test.json`](reports/evaluation_test.json). Comparativo 
 | `06_audit_labels.py` | SFT + validated | `reports/label_audit.json` | Consistência inteiro vs completo |
 | `07_apply_manual_review.py` | CSV revisão | validated + SFT | Correções pontuais de labels |
 
-**Entrega TCC:** labels e LoRA **já prontos** — não é necessário rodar autolabel ou Label Studio novamente.
+**Entrega TCC:** labels e LoRA **já prontos** - não é necessário rodar autolabel ou Label Studio novamente.
 
 ---
 
@@ -66,7 +66,7 @@ Artefatos intermediários (prelabels e import) **não estão versionados**. Regi
 | `03_treino_qlora.ipynb` | Treino e curvas de loss |
 | `04_resultados_comparativos.ipynb` | Baseline vs QLoRA (conclusão dinâmica) |
 
-Kernel: **Python 3 (vit-tcc-qlora)** — ver `.vscode/settings.json`.
+Kernel: **Python 3 (vit-tcc-qlora)** - ver `.vscode/settings.json`.
 
 ---
 
@@ -85,14 +85,14 @@ Depende de [`../mask-rcnn/`](../mask-rcnn/) para Detectron2 e `model_final.pth`.
 
 ## Deploy (demo)
 
-**1. API** — carrega modelos no startup:
+**1. API** - carrega modelos no startup:
 
 ```bash
 source .venv/Scripts/activate
 PYTHONPATH=src uvicorn hidrometro.api.main:app --host 0.0.0.0 --port 8000
 ```
 
-**2. Streamlit** — upload de foto → chama `POST /predict`:
+**2. Streamlit** - upload de foto → chama `POST /predict`:
 
 ```bash
 streamlit run src/hidrometro/ui/streamlit_app.py
@@ -104,9 +104,9 @@ Envie **fotos completas** do hidrômetro. Primeira inferência pode baixar Flore
 
 ## Documentação
 
-- [`docs/GUIA_TCC.md`](docs/GUIA_TCC.md) — fluxo, métricas e limitações
-- [`docs/MODELOS_E_ARTEFATOS.md`](docs/MODELOS_E_ARTEFATOS.md) — artefatos no repo
-- [`reports/README.md`](reports/README.md) — JSONs de métricas
+- [`docs/GUIA_TCC.md`](docs/GUIA_TCC.md) - fluxo, métricas e limitações
+- [`docs/MODELOS_E_ARTEFATOS.md`](docs/MODELOS_E_ARTEFATOS.md) - artefatos no repo
+- [`reports/README.md`](reports/README.md) - JSONs de métricas
 
 ## Estrutura
 

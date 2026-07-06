@@ -1,6 +1,6 @@
-# TCC — Leitura Automática de Hidrômetros com Visão Computacional
+# TCC - Leitura Automática de Hidrômetros com Visão Computacional
 
-**Repositório:** `tcc-postgraduate-computer-vision` — Trabalho de Conclusão de Curso (Pós-graduação em Visão Computacional).
+**Repositório:** `tcc-postgraduate-computer-vision` - Trabalho de Conclusão de Curso (Pós-graduação em Visão Computacional).
 
 **Estudante** - Gabriel Silva Braga
 **Curso** - Computer Vision Master
@@ -17,7 +17,7 @@ Os resultados demonstram viabilidade técnica em ambas as etapas: o detector ati
 
 ## Introdução
 
-Hidrômetros analógicos permanecem amplamente utilizados em redes de abastecimento de água. A leitura periódica dos medidores é essencial para faturamento e gestão de consumo, mas o processo manual — fotografar o equipamento, identificar o visor e transcrever os dígitos — é trabalhoso e propenso a inconsistências.
+Hidrômetros analógicos permanecem amplamente utilizados em redes de abastecimento de água. A leitura periódica dos medidores é essencial para faturamento e gestão de consumo, mas o processo manual - fotografar o equipamento, identificar o visor e transcrever os dígitos - é trabalhoso e propenso a inconsistências.
 
 As imagens de campo apresentam desafios visuais significativos: **reflexos** na superfície do visor, **baixo contraste** entre roletes pretos e vermelhos, variação de **fabricantes** (placas e tipografias distintas) e diferentes **estados físicos** do equipamento (*normal*, *embacado*, *trincado*, *sujo*, *anomalia*). Essas condições dificultam a aplicação direta de OCR genérico ou de modelos de visão-linguagem sem adaptação à tarefa.
 
@@ -38,7 +38,7 @@ Os objetivos deste trabalho são:
 
 ## Resultados finais
 
-### Fase 1 — Detecção (Mask R-CNN)
+### Fase 1 - Detecção (Mask R-CNN)
 
 | Métrica | Valor | Motivo de reportar |
 |---------|-------|--------------------|
@@ -46,7 +46,7 @@ Os objetivos deste trabalho são:
 
 Ver [`mask-rcnn/output/metrics.json`](mask-rcnn/output/metrics.json) e [`mask-rcnn/00_mask_rcnn_hidrometro.ipynb`](mask-rcnn/00_mask_rcnn_hidrometro.ipynb).
 
-### Fase 2 — Leitura VLM (Florence-2 QLoRA, split test n=72)
+### Fase 2 - Leitura VLM (Florence-2 QLoRA, split test n=72)
 
 | Métrica | Baseline (sem LoRA) | Pós-treino QLoRA |
 |---------|---------------------|------------------|
@@ -64,7 +64,7 @@ Fonte: [`vit-tcc-qlora-hidrometro/reports/evaluation_test.json`](vit-tcc-qlora-h
 
 ---
 
-## Pipeline — passo a passo
+## Pipeline - passo a passo
 
 | # | Fase | O que faz | Por quê |
 |---|------|-----------|---------|
@@ -83,21 +83,21 @@ Detalhes de scripts, hiperparâmetros e decisões: [`vit-tcc-qlora-hidrometro/do
 
 O projeto utiliza **dois conjuntos de dados complementares**: um para detecção (formato COCO) e outro para leitura via VLM (formato SFT/JSONL).
 
-### Camada 1 — Detecção (COCO)
+### Camada 1 - Detecção (COCO)
 
 | Atributo | Detalhe |
 |----------|---------|
 | Raiz | [`mask-rcnn/dataset-hidrometro/`](mask-rcnn/dataset-hidrometro/) |
 | Configuração | [`vit-tcc-qlora-hidrometro/configs/paths.yaml`](vit-tcc-qlora-hidrometro/configs/paths.yaml) |
 | Formato | COCO (`_annotations.coco.json`) |
-| Classe | `display` (id=1) — visor do hidrômetro |
+| Classe | `display` (id=1) - visor do hidrômetro |
 | Splits | `train`, `valid`, `test` |
 | Origem | Export Roboflow (CC BY 4.0) |
 | No repositório | Anotações de treino presentes; pesos finais em `mask-rcnn/output/model_final.pth` |
 
 O Mask R-CNN foi treinado sobre este dataset para localizar e segmentar o visor nas fotos brutas. Os pesos treinados (`model_final.pth`, ~335 MB) estão incluídos na entrega.
 
-### Camada 2 — Leitura VLM (SFT)
+### Camada 2 - Leitura VLM (SFT)
 
 Após a detecção, cada imagem passa por expansão de bounding box e realce de contraste (CLAHE), gerando crops em `data/crops/{split}/`. Sobre esses crops foram criadas **719 anotações** revisadas manualmente, divididas nos splits abaixo:
 
@@ -141,7 +141,7 @@ Fonte dos splits: [`vit-tcc-qlora-hidrometro/reports/label_studio_export_audit.j
 3. Autolabel inicial (GPT-4o, etapa histórica) + revisão humana no Label Studio
 4. Export → validação → conversão para `data/sft/*.jsonl`
 
-**Qualidade:** auditoria com **100% de consistência** (719 registros, 0 issues) — [`vit-tcc-qlora-hidrometro/reports/label_audit.json`](vit-tcc-qlora-hidrometro/reports/label_audit.json).
+**Qualidade:** auditoria com **100% de consistência** (719 registros, 0 issues) - [`vit-tcc-qlora-hidrometro/reports/label_audit.json`](vit-tcc-qlora-hidrometro/reports/label_audit.json).
 
 > **Nota de entrega:** as anotações já estão prontas e validadas. Não é necessário recriar labels nem executar novamente o fluxo de Label Studio.
 
@@ -151,12 +151,12 @@ Fonte dos splits: [`vit-tcc-qlora-hidrometro/reports/label_studio_export_audit.j
 
 ```
 TrabalhoDetecaoObjetos/
-├── mask-rcnn/                         # Fase 1 — Mask R-CNN + dataset COCO
+├── mask-rcnn/                         # Fase 1 - Mask R-CNN + dataset COCO
 │   ├── dataset-hidrometro/
 │   ├── output/model_final.pth         # Pesos treinados
 │   └── 00_mask_rcnn_hidrometro.ipynb  # Notebook fase 1
 │
-└── vit-tcc-qlora-hidrometro/          # Fases 2–6 — crops, labels, QLoRA, deploy
+└── vit-tcc-qlora-hidrometro/          # Fases 2–6 - crops, labels, QLoRA, deploy
     ├── scripts/                       # Pipeline 00–07
     ├── notebooks/                     # Documentação interativa
     ├── artifacts/lora_adapter/        # Adaptador LoRA treinado
@@ -169,11 +169,11 @@ TrabalhoDetecaoObjetos/
 
 ## Ordem de leitura (avaliador)
 
-1. **Este README** — visão geral, resultados e pipeline
-2. **Notebooks** — processo fase a fase ([índice](vit-tcc-qlora-hidrometro/notebooks/README.md))
-3. **[vit-tcc-qlora-hidrometro/README.md](vit-tcc-qlora-hidrometro/README.md)** — instalação, scripts e demo
-4. **[docs/GUIA_TCC.md](vit-tcc-qlora-hidrometro/docs/GUIA_TCC.md)** — fluxo completo e decisões técnicas
-5. **[docs/MODELOS_E_ARTEFATOS.md](vit-tcc-qlora-hidrometro/docs/MODELOS_E_ARTEFATOS.md)** — o que está no repo vs HuggingFace
+1. **Este README** - visão geral, resultados e pipeline
+2. **Notebooks** - processo fase a fase ([índice](vit-tcc-qlora-hidrometro/notebooks/README.md))
+3. **[vit-tcc-qlora-hidrometro/README.md](vit-tcc-qlora-hidrometro/README.md)** - instalação, scripts e demo
+4. **[docs/GUIA_TCC.md](vit-tcc-qlora-hidrometro/docs/GUIA_TCC.md)** - fluxo completo e decisões técnicas
+5. **[docs/MODELOS_E_ARTEFATOS.md](vit-tcc-qlora-hidrometro/docs/MODELOS_E_ARTEFATOS.md)** - o que está no repo vs HuggingFace
 
 ### Notebooks
 
@@ -232,9 +232,9 @@ Ou abrir `04_resultados_comparativos.ipynb` (kernel `Python 3 (vit-tcc-qlora)`).
 
 ---
 
-## Demo — inferência em foto de campo
+## Demo - inferência em foto de campo
 
-**Terminal 1 — API** (carrega Detectron2 + Florence-2; ~20–30 s no primeiro start):
+**Terminal 1 - API** (carrega Detectron2 + Florence-2; ~20–30 s no primeiro start):
 
 ```bash
 cd vit-tcc-qlora-hidrometro
@@ -242,7 +242,7 @@ source .venv/Scripts/activate
 PYTHONPATH=src uvicorn hidrometro.api.main:app --host 0.0.0.0 --port 8000
 ```
 
-**Terminal 2 — Streamlit** (interface; depende da API em `localhost:8000`):
+**Terminal 2 - Streamlit** (interface; depende da API em `localhost:8000`):
 
 ```bash
 cd vit-tcc-qlora-hidrometro

@@ -1,4 +1,4 @@
-# Modelos e Artefatos — O que está no repositório
+# Modelos e Artefatos - O que está no repositório
 
 ## Incluídos no Git (entrega TCC)
 
@@ -27,7 +27,7 @@ Na primeira execução com internet, o Florence-2-base é baixado (~1,5 GB). O a
 
 ## Checkpoints intermediários (ignorados)
 
-- `artifacts/lora_adapter/checkpoint-*` — excluídos do Git; só o adaptador final na raiz de `lora_adapter/` é entregue
+- `artifacts/lora_adapter/checkpoint-*` - excluídos do Git; só o adaptador final na raiz de `lora_adapter/` é entregue
 
 ## Reproduzir sem retreinar
 
@@ -46,7 +46,7 @@ Usa `artifacts/lora_adapter/` + `mask-rcnn/output/model_final.pth` já presentes
 PYTHONPATH=src python scripts/04_train_qlora.py
 ```
 
-Requer GPU CUDA, ~40 min para 8 épocas. Labels em `data/sft/` — **não recrie labels**.
+Requer GPU CUDA, ~40 min para 8 épocas. Labels em `data/sft/` - **não recrie labels**.
 
 ## Demo
 

@@ -1,4 +1,4 @@
-# Módulo 1 — Detecção Mask R-CNN
+# Módulo 1 - Detecção Mask R-CNN
 
 Parte do TCC [`TrabalhoDetecaoObjetos`](../README.md): localiza e segmenta hidrômetros nas fotos de campo.
 
@@ -21,7 +21,7 @@ Curvas completas: [`output/metrics.json`](output/metrics.json).
 | 3 | Export `model_final.pth` | Pesos congelados para inferência |
 | 4 | Classe `display` (id=1) | Visor usado pelo módulo 2 para crop |
 
-O módulo 2 **não retreina** o Detectron2 — consome `model_final.pth` via [`vit-tcc-qlora-hidrometro/configs/paths.yaml`](../vit-tcc-qlora-hidrometro/configs/paths.yaml).
+O módulo 2 **não retreina** o Detectron2 - consome `model_final.pth` via [`vit-tcc-qlora-hidrometro/configs/paths.yaml`](../vit-tcc-qlora-hidrometro/configs/paths.yaml).
 
 ---
 
@@ -38,7 +38,7 @@ O módulo 2 **não retreina** o Detectron2 — consome `model_final.pth` via [`v
 
 ## Notebook
 
-[`00_mask_rcnn_hidrometro.ipynb`](00_mask_rcnn_hidrometro.ipynb) — treino, avaliação COCO e visualizações.
+[`00_mask_rcnn_hidrometro.ipynb`](00_mask_rcnn_hidrometro.ipynb) - treino, avaliação COCO e visualizações.
 
 Kernel sugerido: **Python 3.14 (detectron2)** ou ambiente com Detectron2 compilado.
 
@@ -48,8 +48,8 @@ Kernel sugerido: **Python 3.14 (detectron2)** ou ambiente com Detectron2 compila
 
 O módulo 2 ([`vit-tcc-qlora-hidrometro/`](../vit-tcc-qlora-hidrometro/)) consome:
 
-- `output/model_final.pth` — detecção congelada
-- `detectron2_repo/` — via `pip install -e` ou `sys.path`
+- `output/model_final.pth` - detecção congelada
+- `detectron2_repo/` - via `pip install -e` ou `sys.path`
 
 Scripts de crop: `vit-tcc-qlora-hidrometro/scripts/01_generate_crops.py`.
 

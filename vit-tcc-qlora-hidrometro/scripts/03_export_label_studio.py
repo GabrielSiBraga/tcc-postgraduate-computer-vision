@@ -27,7 +27,7 @@ def import_tasks(split: str) -> None:
     paths = load_yaml("paths.yaml")
     crops_base = resolve_path(paths["output"]["crops"])
     crops_root = crops_base / split
-    # DOCUMENT_ROOT deve ser o pai de crops/ (ex: data/) — storage aponta para crops/
+    # DOCUMENT_ROOT deve ser o pai de crops/ (ex: data/) - storage aponta para crops/
     document_root = crops_base.parent
     raw_root = resolve_path(paths["output"]["autolabel_raw"]) / split
     validated_root = resolve_path(paths["output"]["autolabel_validated"]) / split

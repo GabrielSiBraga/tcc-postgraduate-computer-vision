@@ -1,4 +1,4 @@
-# Guia TCC — Pipeline Híbrido de Leitura de Hidrômetros
+# Guia TCC - Pipeline Híbrido de Leitura de Hidrômetros
 
 Documento de referência para reproduzir e avaliar o projeto entregue neste repositório.
 
@@ -12,7 +12,7 @@ Automatizar a leitura de hidrômetros analógicos a partir de fotos de campo, co
 |---|----------------|---------|-------|--------|
 | 0a | `00_calibrate_crop.py` | Imagens + bbox | Parâmetros de expansão | Crop inclui visor completo |
 | 0b | `01_generate_crops.py` | Dataset COCO | `data/crops/` | CLAHE melhora roletes |
-| 1a | `00_purge_labels.py` | Labels legados | — | Remove schema antigo (só se reproduzir do zero) |
+| 1a | `00_purge_labels.py` | Labels legados | - | Remove schema antigo (só se reproduzir do zero) |
 | 1b | *(histórico)* Label Studio | Crops | Export anotado | Autolabel inicial + revisão humana |
 | 1c | `03_export_label_studio.py --mode convert` | `data/label_studio/export/` | `data/autolabel/validated/` | Parse do export LS |
 | 1d | `03_export_label_studio.py --mode export` | Validated | `data/sft/*.jsonl` | Dataset SFT |
@@ -35,7 +35,7 @@ Ground truth: `data/autolabel/validated/{split}/` (derivado de `data/label_studi
 
 Auditoria atual: **100% consistência** (719 registros, 0 issues).
 
-## 4. Treino QLoRA — decisões de design
+## 4. Treino QLoRA - decisões de design
 
 ### Modelo
 - **Florence-2-large**: encoder DaViT + decoder seq2seq
@@ -54,7 +54,7 @@ Auditoria atual: **100% consistência** (719 registros, 0 issues).
 | eval_steps | 50 | Seleção fina por eval_loss |
 | load_best_model_at_end | true | Salva melhor val, não última época |
 
-## 5. Métricas — como interpretar
+## 5. Métricas - como interpretar
 
 ### Leitura (split test, n=72)
 
@@ -94,7 +94,7 @@ Exact match ≠ acurácia por caractere: a primeira exige vírgula e zeros corre
 ## 8. Limitações
 
 1. Dependência do Detectron2 para localizar hidrômetro
-2. Exact match 38,9% — transcrição literal é exigente
+2. Exact match 38,9% - transcrição literal é exigente
 3. F1 macro baixo em classes raras (*embacado*, marcas minoritárias)
 4. Dataset ~500 amostras de treino
 5. Primeira inferência requer download do Florence-2 (~1,5 GB)

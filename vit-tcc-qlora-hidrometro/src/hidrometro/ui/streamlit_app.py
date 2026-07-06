@@ -16,7 +16,7 @@ def _b64_image(data: str) -> bytes:
 
 
 st.set_page_config(page_title="Leitura de Hidrômetro", layout="wide")
-st.title("Pipeline Híbrido — Detectron2 + Florence-2 QLoRA")
+st.title("Pipeline Híbrido - Detectron2 + Florence-2 QLoRA")
 st.caption("Upload de foto bruta → detecção → crop completo → CLAHE → leitura estruturada")
 
 uploaded = st.file_uploader("Envie uma foto do hidrômetro", type=["jpg", "jpeg", "png"])
@@ -52,12 +52,12 @@ if uploaded is not None:
                 st.image(_b64_image(debug["crop_base64"]), use_container_width=True)
         with c2:
             st.subheader("Resultado")
-            st.metric("Inteiro (m³)", leitura.get("inteiro", "—"))
-            st.metric("Decimal", leitura.get("decimal", "—"))
-            st.metric("Completo (visor)", leitura.get("completo", "—"))
-            st.metric("Fabricante", payload.get("fabricante", "—"))
-            st.metric("Estado", payload.get("estado", "—"))
-            st.metric("Latência (ms)", payload.get("latency_ms", "—"))
+            st.metric("Inteiro (m³)", leitura.get("inteiro", "-"))
+            st.metric("Decimal", leitura.get("decimal", "-"))
+            st.metric("Completo (visor)", leitura.get("completo", "-"))
+            st.metric("Fabricante", payload.get("fabricante", "-"))
+            st.metric("Estado", payload.get("estado", "-"))
+            st.metric("Latência (ms)", payload.get("latency_ms", "-"))
 
         with st.expander("Debug"):
             st.json(payload)
